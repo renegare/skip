@@ -1,0 +1,15 @@
+{
+    "name": "mudiugbowanko/skip",
+    "description": "Simple configuration layer around silex framework. With the aim of reducing spin up times with 'green field' projects.",
+    "license": "WHATEVER",
+    "authors": [
+        {
+            "name": "Mudi Ugbowanko",
+            "email": "mudi@ugbowanko.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+
+    }
+}
