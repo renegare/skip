@@ -8,8 +8,19 @@
             "email": "mudi@ugbowanko.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {
 
+    "minimum-stability": "dev",
+
+    "require": {
+        "silex/silex": "v1.1.2",
+        "symfony/finder": "v2.4.1",
+        "jdorn/sql-formatter": "v1.2.0"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "symfony/browser-kit": "v2.4.1",
+        "symfony/web-profiler-bundle": "v2.4.1",
+        "silex/web-profiler": "v1.0.1"
     }
 }
