@@ -68,4 +68,8 @@
 			return $compiledConfig;
 		}
 
+		public function getFinder() {
+			return $this->finder;
+		}
+
 	}

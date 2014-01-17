@@ -65,4 +65,9 @@
 			$this->assertArrayHasKey('param1', $loadedConfig);
 			$this->assertEquals('value2', $loadedConfig['param1']);
 		}
+
+		public function testGetFinder() {
+			$loader = new ConfigLoader(array());
+			$this->assertInstanceOf('Symfony\Component\Finder\Finder', $loader->getFinder());
+		}
 	}

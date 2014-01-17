@@ -8,9 +8,9 @@
 
 	abstract class WebApplicationTestCase extends \Silex\WebTestCase {
 
-        public function createClient(array $server = array())
+        public function createClient(array $server = array(), WebApplication $app=null)
         {
-            return new Client( $this->createApplication(), $server);
+            return new Client( $app ? $app : $this->createApplication(), $server);
         }
 
         abstract public function getConfigLoader();
@@ -20,16 +20,7 @@
 			$app = new WebApplication();
 			$app->setConfigLoader($this->getConfigLoader());
 			$app->configure();
-
 		    return $app;
 		}
-
-        public static function isInternetConnected() {
-            if (!$sock = @fsockopen('www.google.com', 80, $num, $error, 5)) {
-                return false;
-            } else {
-                return true;
-            }
-        }
 
 	}
