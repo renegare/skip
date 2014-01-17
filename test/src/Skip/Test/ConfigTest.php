@@ -29,17 +29,12 @@
 		public function getProviderSettingTestCases() {
 			return array(
 				array(
-					array(
-						'class' => 'Skip\\Test\\Helper\\TestServiceProvider'
-					)
+					array( 'class' => 'Skip\\Test\\Helper\\TestServiceProvider' )
 				),
 				array(
 					array(
 						'class' => 'Skip\\Test\\Helper\\TestServiceProvider',
-						'params' => array(
-							'param.1' => 1,
-							'param.2' => 2
-						)
+						'params' => array('param.1' => 1, 'param.2' => 2)
 					)
 				)
 			);
