@@ -4,7 +4,7 @@ README
 What is Skip?
 -------------
 
-Skip is a configuration wrapper around Silex (PHP microframework). The aim is to 'skip' the manual setup/configuration of silex and put all that stuff in a json file somewhere.
+Skip is a configuration wrapper around [Silex (PHP microframework)][1]. The aim is to 'skip' the manual setup/configuration of silex and put all that stuff in a json file somewhere.
 
 
 Installation
@@ -96,4 +96,4 @@ TODOS (That I can think of)
 * Documentation with examples
 * Cover all the various ways silex can be configured
 
-
+[1]: http://silex.sensiolabs.org/doc/usage.html
