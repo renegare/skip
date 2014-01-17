@@ -32,6 +32,12 @@ After that I think it would be pretty comprehensive and need not get more compli
 Contributions/Pull Requests/Forks are welcome. Enjoy!
 
 
+Testing
+-------
+
+```[project root]$ composer update && phpunit```
+
+
 TODOS (That I can think of)
 ---------------------------
 
