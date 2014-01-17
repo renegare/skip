@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "6bca6ef6d03bbd7815452bdb8ad32a46",
+    "hash": "838761fed20e02d0d50d54d52aeaf701",
     "packages": [
         {
             "name": "jdorn/sql-formatter",

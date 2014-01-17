@@ -11,6 +11,12 @@
 
     "minimum-stability": "dev",
 
+    "autoload": {
+        "psr-0": {
+            "Skip": "src"
+        }
+    },
+
     "require": {
         "silex/silex": "v1.1.2",
         "symfony/finder": "v2.4.1",
