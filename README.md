@@ -68,9 +68,9 @@ Supported Silex Configuration
 
 Silex Application has various 'features' you can configure to create the application you desire. Skip only currently supports and configures the following (in the respective order):
 
-# Providers
-# Settings
-# Routes
+1. Providers
+2. Settings
+3. Routes
 
 I am keen to implement the following in the future (I tend to create Service Providers):
 
@@ -91,9 +91,9 @@ Testing
 TODOS (That I can think of)
 ---------------------------
 
-* Support for other appropriate config file types
-* Simple config level cache mechanism
-* Documentation with examples
-* Cover all the various ways silex can be configured
+- [ ] Support for other appropriate config file types
+- [ ] Simple config level cache mechanism
+- [ ] Documentation with examples
+- [ ] Cover all the various ways silex can be configured
 
 [1]: http://silex.sensiolabs.org/doc/usage.html
