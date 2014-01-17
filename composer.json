@@ -1,7 +1,8 @@
 {
     "name": "renegare/skip",
     "description": "Simple configuration layer around silex framework. With the aim of reducing spin up times with 'green field' projects.",
-    "license": "WHATEVER",
+    "keywords": ["silex", "config", "renegare"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Mudi Ugbowanko",
