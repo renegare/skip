@@ -3,9 +3,9 @@ README
 
 Branch Build Status
 -------------------
-Master: [![Build Status](https://travis-ci.org/renegare/skip.png?branch=master)](https://travis-ci.org/renegare/skip)
+[![Build Status](https://travis-ci.org/renegare/skip.png?branch=master)](https://travis-ci.org/renegare/skip) on Master
 
-Development: [![Build Status](https://travis-ci.org/renegare/skip.png?branch=development)](https://travis-ci.org/renegare/skip)
+[![Build Status](https://travis-ci.org/renegare/skip.png?branch=development)](https://travis-ci.org/renegare/skip) on Development
 
 
 What is Skip?
