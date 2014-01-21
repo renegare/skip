@@ -16,7 +16,7 @@ env:
 
 before_script:
   - php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
-  - php composer.phar require silex/silex:${SILEX_VERSION}
+  - php composer.phar require --prefer-source silex/silex:${SILEX_VERSION}
 
 script: vendor/bin/phpunit --coverage-text
 
