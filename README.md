@@ -1,6 +1,12 @@
 README
 ======
 
+Branch Build Status
+-------------------
+Master: [![Build Status](https://travis-ci.org/renegare/skip.png?branch=master)](https://travis-ci.org/renegare/skip)
+Development: [![Build Status](https://travis-ci.org/renegare/skip.png?branch=development)](https://travis-ci.org/renegare/skip)
+
+
 What is Skip?
 -------------
 
