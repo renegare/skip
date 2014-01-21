@@ -15,9 +15,10 @@ env:
   - SILEX_VERSION=dev-master
 
 before_script:
-  - composer require silex/silex:${SILEX_VERSION}
+  - php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
+  - php composer.phar require --prefer-source silex/silex:${SILEX_VERSION}
 
-script: phpunit --coverage-text
+script: vendor/bin/phpunit --coverage-text
 
 notifications:
   email:
