@@ -28,6 +28,11 @@
         }
 
         public function configureRoute(array $settings, $name='') {
+            
+            if(isset($settings['debug'])
+                && $settings['debug'] == true
+                && $this->app['debug'] != true ) return;
+
             $controller = $this->app->match($settings['route'], $settings['controller']);
 
             if(strlen($name) > 0) {
