@@ -178,4 +178,78 @@
 			$config->configureRoute($routeSettings, $routeName);
 
 		}
+
+		/**
+		 * test a route flagged as debug = true is NEVER registered when $app['debug'] != true
+		 */
+		public function testDebugRouteIsNotRegistered() {
+
+			$routeName = 'test';
+			$routeSettings = array(
+				'debug' => true
+			);
+
+			$mockApplication = $this->getMockBuilder('Silex\Application')
+				->disableOriginalConstructor()
+				->getMock();
+
+			$mockApplication->expects($this->never())
+				->method('match');
+
+			$mockApplication->expects($this->once())
+				->method('offsetGet')
+				->will($this->returnCallback(function(){
+					return false;
+				}));
+
+			$config = new Config($mockApplication);
+			$config->configureRoute($routeSettings, $routeName);
+		}
+
+		/**
+		 * test a route flagged as debug = true IS registered when $app['debug'] == true
+		 */
+		public function testDebugRouteIsRegistered() {
+			$routeName = 'test';
+			$routeSettings = array(
+				'route' => '/',
+				'controller' => 'Skip\\Test\\Helper\\TestServiceProvider::testAction',
+				'debug' => true
+			);
+
+			$mockController = $this->getMockBuilder('Silex\Controller')
+				->disableOriginalConstructor()
+				->setMethods(array('method', 'bind', 'value', 'assert', 'convert', 'before', 'after' ))
+				->getMock();
+
+			$mockController->expects($this->once())
+				->method('bind')
+				->will($this->returnCallback(function($name) use ($routeName) {
+					$this->assertEquals($routeName, $name);
+				}));
+
+
+			$mockApplication = $this->getMockBuilder('Silex\Application')
+				->disableOriginalConstructor()
+				->getMock();
+
+			$mockApplication->expects($this->once())
+				->method('offsetGet')
+				->will($this->returnCallback(function(){
+					return true;
+				}));
+
+			$mockApplication->expects($this->once())
+				->method('match')
+				->will($this->returnCallback(function($routePath, $controller) use ($routeSettings, $mockController) {
+					$this->assertEquals($routePath, $routeSettings['route']);
+					$this->assertEquals($controller, $routeSettings['controller']);
+					return $mockController;
+				}));
+
+			$mockApplication['debug'] = true;
+
+			$config = new Config($mockApplication);
+			$config->configureRoute($routeSettings, $routeName);
+		}
 	}

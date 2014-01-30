@@ -20,7 +20,8 @@
 
     "require": {
         "symfony/finder": ">=2.3,<2.5-dev",
-        "silex/silex": "1.0.*"
+        "silex/silex": ">=1.0",
+        "seld/jsonlint": "1.1.2"
     },
 
     "require-dev": {

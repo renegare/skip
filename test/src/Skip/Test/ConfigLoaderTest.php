@@ -70,4 +70,33 @@
 			$loader = new ConfigLoader(array());
 			$this->assertInstanceOf('Symfony\Component\Finder\Finder', $loader->getFinder());
 		}
+
+		public function testConstantPlaceHolder() {
+			$mockConfigContent = $mockConfigContent = array(
+				'json' => json_encode(array(
+					"param1" => "#CONSTANT#"
+					)));
+
+			$mockFinder = $this->getMockFinder($mockConfigContent);
+
+			$loader = new ConfigLoader(array('dir1', 'dir2'), $mockFinder, array('CONSTANT' => 'value2'));
+			$loadedConfig = $loader->load();
+
+			$this->assertArrayHasKey('param1', $loadedConfig);
+			$this->assertEquals('value2', $loadedConfig['param1']);
+		}
+		
+		/**
+		 * @expectedException Skip\InvalidConfigException
+		 */
+		public function testInvalidConfigException() {
+			$mockConfigContent = $mockConfigContent = array(
+				'json' => '{invalid:"config"}'
+			);
+
+			$mockFinder = $this->getMockFinder($mockConfigContent);
+
+			$loader = new ConfigLoader(array('dir1'), $mockFinder);
+			$loadedConfig = $loader->load();
+		}
 	}
