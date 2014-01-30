@@ -3,6 +3,7 @@
 	namespace Skip;
 
 	use Symfony\Component\Finder\Finder;
+	use Seld\JsonLint\JsonParser;
 
 	/**
 	 * Config loader class that finds and merges the configuratio accross multiple files
@@ -52,17 +53,25 @@
 		public function load() {
 			$compiledConfig = array();
 
-			foreach($this->finder as $file) {
-				$config = null;
-				switch($file->getExtension()) {
-					case 'json':
-						$config = json_decode($file->getContents(), true);
-						break;
-				}
+			$parser = new JsonParser();
 
-				if($config) {
-					$compiledConfig = array_replace_recursive($compiledConfig, $config);
+			try {
+				foreach($this->finder as $file) {
+					$config = null;
+					switch($file->getExtension()) {
+						case 'json':
+							$config = $file->getContents();
+							$e = $parser->lint($config);
+							if($e) throw $e;
+							$config = json_decode($config, true); 
+							break;
+					}
+					if($config) {
+						$compiledConfig = array_replace_recursive($compiledConfig, $config);
+					}
 				}
+			} catch (\Seld\JsonLint\ParsingException $e) {
+				throw new InvalidConfigException((string) $e);
 			}
 
 			return $compiledConfig;

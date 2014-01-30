@@ -20,7 +20,7 @@
 
     "require": {
         "symfony/finder": ">=2.3,<2.5-dev",
-        "jdorn/sql-formatter": "v1.2.0",
+        "seld/jsonlint": "1.1.2",
         "silex/silex": "dev-master"
     },
 

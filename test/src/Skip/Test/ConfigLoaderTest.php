@@ -70,4 +70,18 @@
 			$loader = new ConfigLoader(array());
 			$this->assertInstanceOf('Symfony\Component\Finder\Finder', $loader->getFinder());
 		}
+
+		/**
+		 * @expectedException Skip\InvalidConfigException
+		 */
+		public function testInvalidConfigException() {
+			$mockConfigContent = $mockConfigContent = array(
+				'json' => '{invalid:"config"}'
+			);
+
+			$mockFinder = $this->getMockFinder($mockConfigContent);
+
+			$loader = new ConfigLoader(array('dir1'), $mockFinder);
+			$loadedConfig = $loader->load();
+		}
 	}
