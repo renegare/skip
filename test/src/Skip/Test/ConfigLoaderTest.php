@@ -85,4 +85,18 @@
 			$this->assertArrayHasKey('param1', $loadedConfig);
 			$this->assertEquals('value2', $loadedConfig['param1']);
 		}
+		
+		/**
+		 * @expectedException Skip\InvalidConfigException
+		 */
+		public function testInvalidConfigException() {
+			$mockConfigContent = $mockConfigContent = array(
+				'json' => '{invalid:"config"}'
+			);
+
+			$mockFinder = $this->getMockFinder($mockConfigContent);
+
+			$loader = new ConfigLoader(array('dir1'), $mockFinder);
+			$loadedConfig = $loader->load();
+		}
 	}
