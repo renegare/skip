@@ -28,8 +28,14 @@
 			}
 
 			if(isset($configuration['routes'])) {
-				foreach($configuration['routes'] as $provider) {
-					$config->configureRoute($provider);
+				foreach($configuration['routes'] as $route) {
+					$config->configureRoute($route);
+				}
+			}
+
+			if(isset($configuration['services'])) {
+				foreach($configuration['services'] as $serviceName => $service) {
+					$config->configureService($serviceName, $service);
 				}
 			}
 		}

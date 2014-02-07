@@ -73,4 +73,39 @@
                 }
             }
         }
+
+        public function configureService($serviceName, array $settings) {
+            $this->app[$serviceName] = $this->app->share(function(Application $app) use ($settings){
+                $class = new \ReflectionClass( $settings['class'] );
+
+                $arguments = array();
+                foreach( $settings['deps'] as $key ) {
+                    if(is_string($key) && preg_match('/^%(.+)%$/', $key, $matches)) {
+                        $key = $matches[1];
+                        $value = $this->app[$key];
+                    } else {
+                        $value = $key;
+                    }
+
+                    $arguments[] = $value;
+                }
+
+                $instance = $class->newInstanceArgs( $arguments );
+
+                if(isset($settings['set'])) {
+                    foreach($settings['set'] as $field => $value ) {
+                        if(is_string($value) && preg_match('/^%(.+)%$/', $value, $matches)) {
+                            $value = $matches[1];
+                            $value = $this->app[$value];
+                        }
+
+                        $method = 'set'.ucwords(preg_replace('/_+/', ' ', strtolower($field)));
+                        $method = preg_replace('/\s+/', '', $method);
+
+                        $instance->$method($value);
+                    }
+                }
+                return $instance;
+            });
+        }
     }

@@ -252,4 +252,34 @@
 			$config = new Config($mockApplication);
 			$config->configureRoute($routeSettings, $routeName);
 		}
+
+		/**
+		 * test configureService method
+		 */
+		public function testConfigureService() {
+			$serviceName = 'test.service';
+			$serviceSetting = array(
+				        'class' => 'Skip\Test\Helper\GenericTestClass',
+				        'deps' => array('dep_value', '%another.service%'),
+				        'set' => array(
+				            'param_a' => 'value_a',
+				            'param_b' => '%another.service%'
+				        )
+					);
+
+			$mockApplication = new Application;
+			$mockApplication['another.service'] = "some_value";
+
+			$config = new Config($mockApplication);
+			$config->configureService($serviceName, $serviceSetting);
+
+			$service = $mockApplication[$serviceName];
+
+			$this->assertEquals($serviceSetting['deps'][0], $service->deps[0]);
+			$this->assertEquals($mockApplication['another.service'], $service->deps[1]);
+
+			$this->assertEquals($serviceSetting['set']['param_a'], $service->params[0]);
+			$this->assertEquals($mockApplication['another.service'], $service->params[1]);
+
+		}
 	}
