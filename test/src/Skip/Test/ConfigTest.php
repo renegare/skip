@@ -254,8 +254,7 @@
 		}
 
 		/**
-		 * 
-		 * dataProvider getProviderSettingTestCases
+		 * test configureService method
 		 */
 		public function testConfigureService() {
 			$serviceName = 'test.service';
