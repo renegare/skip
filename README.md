@@ -78,10 +78,10 @@ Silex Application has various 'features' you can configure to create the applica
 1. Providers
 2. Settings
 3. Routes
+4. Services
 
-I am keen to implement the following in the future (I tend to create Service Providers):
+I am keen to implement the following in the future:
 
-* Services
 * Configuration placeholders (starts to get messy!)
 
 After that I think it would be pretty comprehensive and need not get more complicated than that (as this is only a framework wrapper ... not a framework).
@@ -100,7 +100,7 @@ TODOS (That I can think of)
 
 - [ ] Support for other appropriate config file types
 - [ ] Simple config level cache mechanism
-- [ ] Documentation with examples
+- [ ] Documentation with examples (Please see ConfigTest.php for examples)
 - [ ] Cover all the various ways silex can be configured
 
 [1]: http://silex.sensiolabs.org/doc/usage.html
