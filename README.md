@@ -78,16 +78,14 @@ Create a file with the following code in-place:
 ```
 #!/usr/bin/env php
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 $app = new Skip\ConsoleApplication();
-$app->setConfigLoaderCallback(function(InputInterface $input, $env, $devUser) {
-	// based on the params passed in, you decide what configuration is loaded e.g console specific stuff?
-	$configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
-	$loader = new Skip\ConfigLoader($configPaths);
-	return 
+$app->setConfigLoaderCallback(function(Symfony\Component\Console\Input\InputInterface $input, $env, $devUser) {
+    $configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
+    $loader = new Skip\ConfigLoader($configPaths);
+    return $loader;
 });
-$app->configure();
 $app->run();
 ```
 

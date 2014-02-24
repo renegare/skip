@@ -56,7 +56,7 @@ class ConsoleApplication extends Application {
      * creates and configures a new application.
      * @return void
      */
-    protected function loadConfig(InputInterface $input) {
+    protected function loadConfig(InputInterface $input = null) {
         if(!$this->callback) return;
         $callback = $this->callback;
         $configLoader = $callback($input, $input->getParameterOption('--env'), $input->getParameterOption('--devuser'));
@@ -70,8 +70,8 @@ class ConsoleApplication extends Application {
     /**
      * {@inheritdoc}
      */
-    public function run(InputInterface $input = null, OutputInterface $output = null) {
+    public function configureIO(InputInterface $input, OutputInterface $output) {
         $this->loadConfig($input);
-        return parent::run($input, $output);
+        return parent::configureIO($input, $output);
     }
 }
