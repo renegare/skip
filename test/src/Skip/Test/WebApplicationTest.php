@@ -13,9 +13,22 @@
 					array(
 						'class'=>'Skip\\Test\\Helper\\TestServiceProvider', 
 						'params'=>array('provider.setting' => true))),
-				'settings' => array('debug'=>true, 'test.setting' => array('test value'), 'provider.setting' => 'override_defaults'),
+				'settings' => array(
+					'debug'=>true, 
+					'test.setting' => array('test value'), 
+					'provider.setting' => 'override_defaults',
+					'another.service' => '%another.service%'),
 				'routes' => array(
-					'test' => array('route'=>'/test', 'controller'=>'Skip\\Test\\Helper\\TestServiceProvider::testAction'))
+					'test' => array('route'=>'/test', 'controller'=>'Skip\\Test\\Helper\\TestServiceProvider::testAction')),
+				'services' => array(
+					'test.service' => array(
+				        'class' => 'Skip\Test\Helper\GenericTestClass',
+				        'deps' => array('dep_value', '%another.service%'),
+				        'set' => array(
+				            'param_a' => 'value_a',
+				            'param_b' => '%another.service%'
+				        )
+					))
 			);
 			
 			$mockConfigLoader = $this->getMockBuilder('Skip\ConfigLoader')
