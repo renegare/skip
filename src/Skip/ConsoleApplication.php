@@ -60,10 +60,11 @@ class ConsoleApplication extends Application {
         if(!$this->callback) return;
         $callback = $this->callback;
         $configLoader = $callback($input, $input->getParameterOption('--env'), $input->getParameterOption('--devuser'));
-
-        $this->app = new WebApplication(array(), $this);
-        $this->app->setConfigLoader($configLoader);
-        $this->app->configure();
+        if($configLoader) {
+            $this->app = new WebApplication(array(), $this);
+            $this->app->setConfigLoader($configLoader);
+            $this->app->configure();
+        }
     }
 
     /**

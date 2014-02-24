@@ -75,10 +75,39 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
 	/*
 	 * test that console sets a reference of the pimple app to the command if 
 	 * provided it has implemented the correct interface
-	 * @todo write test. Currently all commands will need to have a setContainer method that accepts a \Pimple $arg 
-	 *
-	public function testConsoleInjectsApplication() {
+	 */
+	public function testConsoleInjectsContainer() {
+		$console = new ConsoleApplication();
+		$console->setAutoExit(false);
+		$console->setConfigLoaderCallback(function(InputInterface $input, $env=false, $devUser=false){
 
+			// test config
+			$mockConfigLoader = $this->getMock('Skip\ConfigLoader', array('load'), array(), '', FALSE);
+			$mockConfigLoader->expects($this->once())
+				->method('load')
+				->will($this->returnValue(array(
+					'settings' => array(
+						'env' => $env, // @note: you need to insert env variables into your config
+						'dev.user' => $devUser, // @ditto as above
+					),
+					'console' => array(
+						'commands' => array(
+							'Skip\Test\Helper\TestConsoleCommand'
+							)
+						)
+					)));
+			return $mockConfigLoader;
+		});
+
+		$tester = new ApplicationTester($console);
+        $tester->run(array(
+        	'command' => 'test:command',
+        	'--env' => 'test-env',
+        	'--devuser' => 'test-user'
+        	));
+
+       	$output = $tester->getDisplay();
+        $this->assertRegExp('/runtime env is test-env/', $output);
+        $this->assertRegExp('/runtime dev.user is test-user/', $output);
 	}
-	*/
 }

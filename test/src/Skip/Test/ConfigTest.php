@@ -2,7 +2,7 @@
 	
 	namespace Skip\Test;
 
-	use Silex\Application;
+	use Skip\WebApplication as Application;
 	use Skip\Config;
 
 
@@ -46,7 +46,7 @@
 		 */
 		public function testConfigureProvider($providerSetting) {
 
-			$mockApplication = $this->getMockBuilder('Silex\Application')
+			$mockApplication = $this->getMockBuilder('Skip\WebApplication')
 				->disableOriginalConstructor()
 				->getMock();
 
@@ -162,7 +162,7 @@
 					}));
 			}
 
-			$mockApplication = $this->getMockBuilder('Silex\Application')
+			$mockApplication = $this->getMockBuilder('Skip\WebApplication')
 				->disableOriginalConstructor()
 				->getMock();
 
@@ -189,7 +189,7 @@
 				'debug' => true
 			);
 
-			$mockApplication = $this->getMockBuilder('Silex\Application')
+			$mockApplication = $this->getMockBuilder('Skip\WebApplication')
 				->disableOriginalConstructor()
 				->getMock();
 
@@ -229,7 +229,7 @@
 				}));
 
 
-			$mockApplication = $this->getMockBuilder('Silex\Application')
+			$mockApplication = $this->getMockBuilder('Skip\WebApplication')
 				->disableOriginalConstructor()
 				->getMock();
 

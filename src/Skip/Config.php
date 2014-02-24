@@ -12,7 +12,7 @@
 
         protected $reflection;
 
-        public function __construct(WebApplication $app, ConsoleApplication $console) {
+        public function __construct(WebApplication $app, ConsoleApplication $console=null) {
             $this->app = $app;
             $this->console = $console;
             $this->reflection = new Reflection();
@@ -79,7 +79,7 @@
         }
 
         public function configureService($serviceName, array $settings) {
-            $this->app[$serviceName] = $this->app->share(function(Application $app) use ($settings){
+            $this->app[$serviceName] = $this->app->share(function(WebApplication $app) use ($settings){
                 $class = new \ReflectionClass( $settings['class'] );
 
                 $arguments = array();

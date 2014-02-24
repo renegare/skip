@@ -22,7 +22,8 @@ class TestConsoleCommand extends Command implements \Skip\ContainerInterface {
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('The environment is ' . $this->app['env']);
+        $output->writeln('runtime env is ' . $this->app['env']);
+        $output->writeln('runtime dev.user is ' . $this->app['dev.user']);
     }
 
 }
