@@ -2,15 +2,19 @@
     
     namespace Skip;
 
-    use Silex\Application;
     use Skip\Util\Reflection;
 
     class Config {
 
         protected $app;
 
-        public function __construct(Application $app) {
+        protected $console;
+
+        protected $reflection;
+
+        public function __construct(WebApplication $app, ConsoleApplication $console) {
             $this->app = $app;
+            $this->console = $console;
             $this->reflection = new Reflection();
         }
 
@@ -107,5 +111,13 @@
                 }
                 return $instance;
             });
+        }
+
+        public function configureCommand($commandClassName){
+            $command = new $commandClassName;
+            if($command instanceof ContainerInterface) {
+                $command->setContainer($this->app);
+            }
+            $this->console->add($command);
         }
     }

@@ -15,6 +15,16 @@ class ConsoleApplication extends Application {
     /** @var ConfigLoader */
     protected $configLoader;
 
+    /** @var WebApplication */
+    protected $app;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN') {
+        parent::__construct($name, $version);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -49,7 +59,11 @@ class ConsoleApplication extends Application {
     protected function loadConfig(InputInterface $input) {
         if(!$this->callback) return;
         $callback = $this->callback;
-        $this->configLoader = $callback($input, $input->getParameterOption('--env'), $input->getParameterOption('--devuser'));
+        $configLoader = $callback($input, $input->getParameterOption('--env'), $input->getParameterOption('--devuser'));
+
+        $this->app = new WebApplication(array(), $this);
+        $this->app->setConfigLoader($configLoader);
+        $this->app->configure();
     }
 
     /**

@@ -8,6 +8,14 @@
 
 	class WebApplication extends Application{
 
+	    /** @var ConsoleApplication */
+	    protected $console;
+
+	    public function __construct(array $values = array(), ConsoleApplication $console = null) {
+			$this->console = $console;
+			parent::__construct($values);
+	    }
+
 		public function setConfigLoader(ConfigLoader $loader) {
 			$this->loader = $loader;
 		}
@@ -15,7 +23,7 @@
 		public function configure() {
 			$configuration = $this->loader->load();
 
-			$config = new Config($this);
+			$config = new Config($this, $this->console);
 
 			if(isset($configuration['providers'])) {
 				foreach($configuration['providers'] as $provider) {
@@ -38,7 +46,15 @@
 					$config->configureService($serviceName, $service);
 				}
 			}
-		}
 
+			if($this->console != null && isset($configuration['console'])) {
+				$consoleSettings = $configuration['console'];
+				if(isset($consoleSettings['commands']) && is_array($consoleSettings['commands'])) {
+					foreach($consoleSettings['commands'] as $commandSetting) {
+						$config->configureCommand($commandSetting);
+					}
+				}
+			}
+		}
 
 	}
