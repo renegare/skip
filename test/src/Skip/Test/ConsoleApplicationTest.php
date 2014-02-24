@@ -33,18 +33,7 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
 			$this->assertEquals('test-env', $env);
 			$this->assertEquals('test-dev', $devUser);
 
-			// test config
-			$mockConfigLoader = $this->getMock('Skip\ConfigLoader', array('load'), array(), '', FALSE);
-			$mockConfigLoader->expects($this->any())
-				->method('load')
-				->will($this->returnValue(array(
-					'console' => array(
-						'commands' => array(
-							'Lib\Test\Console\Helper\TestCommand'
-							)
-						)
-					)));
-			return $mockConfigLoader;
+			return;
 		});
 
 		$tester = new ApplicationTester($console);
