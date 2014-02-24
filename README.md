@@ -13,7 +13,7 @@ What is Skip?
 
 Skip is a configuration wrapper around [Silex (PHP microframework)][1] and [Symfony Console Component][2]. 
 
-The idea behind wrapping these two libraries is provide a starting point for new projects that require a web app and cli interface.
+The idea behind wrapping these two libraries is provide a starting point for new projects that require a *simple* web app and a cli interface.
 
 The aim/goal however is to 'skip' the manual setup/configuration of these libraries (amazing tools but annoying learning curve) and put all that stuff in a json file somewhere. I hope this will allow developers to focus better on their application development.
 
@@ -30,7 +30,7 @@ The recommened way is to use composer to install skip in your project:
 }
 ```
 
-Note: The git flow I use ensures that the ```master``` branch is always stable (or as I see fit ... I'm not perfect!). The ```development``` branch is bleeding edge, but could contain bugs!. Commits merged to master are tagged so you can lock down to a particular version :).
+Note: The git flow I use, ensures that the ```master``` branch is always stable (or as I see fit). The ```development``` branch is bleeding edge, but could contain bugs! Commits merged to master are tagged so you can lock down to a particular version :).
 
 
 Web Application Usage
@@ -39,6 +39,7 @@ Web Application Usage
 Traditionally to start a Silex application you would do the following:
 
 ```
+<?php
 require_once __DIR__.'/../vendor/autoload.php';
 
 $app = new Silex\Application();
@@ -49,9 +50,10 @@ $app->run();
 
 ```
 
-Now you can do this:
+Now you can do this (dont be fooled, it is less PHP code):
 
 ```
+<?php
 require_once __DIR__.'/../vendor/autoload.php';
 
 $configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
@@ -59,9 +61,7 @@ $loader = new Skip\ConfigLoader($configPaths);
 $app = new Skip\WebApplication();
 $app->setConfigLoader($this->getConfigLoader());
 $app->configure();
-
 $app->run();
-
 ```
 
 The example above will find all the ```*.json``` files in the directories set within ```$configPaths``` and merge them into one huge configuration files and in that order.
@@ -78,8 +78,9 @@ Console Application Usage
 
 Create a file with the following code in-place:
 ```
+#!/usr/bin/env php
+<?php
 require_once __DIR__.'/../vendor/autoload.php';
-
 
 $app = new Skip\ConsoleApplication();
 $app->setConfigLoaderCallback(function(InputInterface $input, $env, $devUser) {
@@ -90,10 +91,11 @@ $app->setConfigLoaderCallback(function(InputInterface $input, $env, $devUser) {
 });
 $app->configure();
 $app->run();
-
 ```
 
-Note: Please look through at the test ```ConsoleApplicationTest``` for configuration specifics.
+Ensure your file is executable and all should work as expected.
+
+*Note:* Please look through at the test ```ConsoleApplicationTest``` for configuration specifics.
 
 
 Configuration Filetype Support
