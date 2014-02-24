@@ -11,7 +11,11 @@ Branch Build Status
 What is Skip?
 -------------
 
-Skip is a configuration wrapper around [Silex (PHP microframework)][1]. The aim is to 'skip' the manual setup/configuration of silex and put all that stuff in a json file somewhere.
+Skip is a configuration wrapper around [Silex (PHP microframework)][1] and [Symfony Console Component][2]. 
+
+The idea behind wrapping these two libraries is provide a starting point for new projects that require a web app and cli interface.
+
+The aim/goal however is to 'skip' the manual setup/configuration of these libraries (amazing tools but annoying learning curve) and put all that stuff in a json file somewhere. I hope this will allow developers to focus better on their application development.
 
 
 Installation
@@ -26,8 +30,11 @@ The recommened way is to use composer to install skip in your project:
 }
 ```
 
-Usage
------
+Note: The git flow I use ensures that the ```master``` branch is always stable (or as I see fit ... I'm not perfect!). The ```development``` branch is bleeding edge, but could contain bugs!. Commits merged to master are tagged so you can lock down to a particular version :).
+
+
+Web Application Usage
+---------------------
 
 Traditionally to start a Silex application you would do the following:
 
@@ -47,7 +54,7 @@ Now you can do this:
 ```
 require_once __DIR__.'/../vendor/autoload.php';
 
-$configPaths(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
+$configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
 $loader = new Skip\ConfigLoader($configPaths);
 $app = new Skip\WebApplication();
 $app->setConfigLoader($this->getConfigLoader());
@@ -62,6 +69,31 @@ The example above will find all the ```*.json``` files in the directories set wi
 Then ```$app->configure()``` will go through the configuration and configure your $app.
 
 Browse the code to see what is possible as it really is dead simple ... no huge learning curve. Hopefully it will get you up and running quickly :).
+
+Note: Please look through at the test ```WebApplicationTest``` for configuration specifics.
+
+
+Console Application Usage
+-------------------------
+
+Create a file with the following code in-place:
+```
+require_once __DIR__.'/../vendor/autoload.php';
+
+
+$app = new Skip\ConsoleApplication();
+$app->setConfigLoaderCallback(function(InputInterface $input, $env, $devUser) {
+	// based on the params passed in, you decide what configuration is loaded e.g console specific stuff?
+	$configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
+	$loader = new Skip\ConfigLoader($configPaths);
+	return 
+});
+$app->configure();
+$app->run();
+
+```
+
+Note: Please look through at the test ```ConsoleApplicationTest``` for configuration specifics.
 
 
 Configuration Filetype Support
@@ -89,10 +121,24 @@ After that I think it would be pretty comprehensive and need not get more compli
 Contributions/Pull Requests/Forks are welcome. Enjoy!
 
 
+Supported Symfony Console Configuration
+-----------------------------
+
+Console Application has various 'features' you can configure to create the application you desire. Skip only currently supports and configures the following:
+
+1. Commands
+
+In addition to this, Skip provides the interface ```ContainerInterface```. Implementing this into your commands is recommended so you have access to the DI container (basically the web application) in your commands.
+
+WARNING: Keep your commands as lite/thin as possible. #IMO they should be like controllers where the heavy lifting (business/core logic) is implemented as a service. This keeps the your application code portable/resuable/decoupled. Your commands will also be better understood in 6 months from now ;)
+
+Contributions/Pull Requests/Forks are welcome. Enjoy!
+
+
 Testing
 -------
 
-```[project root]$ composer update && phpunit```
+```[project root]$ composer update && /vendor/bin/phpunit --coverage-text```
 
 
 TODOS (That I can think of)
@@ -100,7 +146,9 @@ TODOS (That I can think of)
 
 - [ ] Support for other appropriate config file types
 - [ ] Simple config level cache mechanism
-- [ ] Documentation with examples (Please see ConfigTest.php for examples)
-- [ ] Cover all the various ways silex can be configured
+- [ ] Documentation with examples (Please see ```test/src/Skip/Test``` for examples)
+- [ ] Cover all the various ways silex can be configured (low priority)
+- [ ] Cover all the various ways symfony console component can be configured (low priority)
 
 [1]: http://silex.sensiolabs.org/doc/usage.html
+[2]: http://symfony.com/doc/current/components/console/introduction.html
