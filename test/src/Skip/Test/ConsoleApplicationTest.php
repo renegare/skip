@@ -23,4 +23,32 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
         $this->assertRegExp('/Available commands:/', $tester->getDisplay());
 	}
 
+	/**
+	 * test that console app captures env and dev user variables
+	 */
+	public function testConsoleIsEnvAndUserAware() {
+		$console = new ConsoleApplication();
+		$console->setAutoExit(false);
+		$console->setConfigLoaderCallback(function(InputInterface $input, $env=null, $devUser=null){
+			$this->assertEquals('test-env', $env);
+			$this->assertNull($devUser);
+
+			// test config
+			$mockConfigLoader = $this->getMock('Skip\ConfigLoader', array('load'), array(), '', FALSE);
+			$mockConfigLoader->expects($this->once())
+				->method('load')
+				->will($this->returnValue(array(
+					'console' => array(
+						'commands' => array(
+							'Lib\Test\Console\Helper\TestCommand'
+							)
+						)
+					)));
+			return $mockConfigLoader;
+		});
+
+		$tester = new ApplicationTester($console);
+        $tester->run(array());
+	}
+
 }
