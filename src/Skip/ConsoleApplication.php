@@ -74,4 +74,8 @@ class ConsoleApplication extends Application {
         $this->loadConfig($input);
         return parent::configureIO($input, $output);
     }
+
+    public function getServiceContainer() {
+        return $this->app;
+    }
 }

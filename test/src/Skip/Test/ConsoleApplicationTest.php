@@ -110,4 +110,34 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
         $this->assertRegExp('/runtime env is test-env/', $output);
         $this->assertRegExp('/runtime dev.user is test-user/', $output);
 	}
+
+	/**
+	 * test that we can access the console's service container 
+	 * (required for testing/stubbing our configured services)
+	 */
+	public function testGetServiceContainer() {
+
+		$console = new ConsoleApplication();
+		$console->setAutoExit(false);
+
+		$console->setConfigLoaderCallback(function(InputInterface $input, $env=false, $devUser=false){
+			// test config
+			$mockConfigLoader = $this->getMock('Skip\ConfigLoader', array('load'), array(), '', FALSE);
+			$mockConfigLoader->expects($this->once())
+				->method('load')
+				->will($this->returnValue(array()));
+			return $mockConfigLoader;
+		});
+
+		$tester = new ApplicationTester($console);
+        $tester->run(array()); 
+
+        /**
+         * @todo: put this in the docs under testing somewhere
+         * service container IS NOT available before you run the console app or if no config loader callback has been set, because configuration happens at runtime.
+         * Therefore run the application, grab the service container, mock out what you want AND then run your assertions.
+         * @hopefully: will think of a better solution to testing that reads better
+         */
+        $this->assertInstanceOf('Pimple', $console->getServiceContainer());
+	}
 }
