@@ -29,13 +29,13 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
 	public function testConsoleIsEnvAndUserAware() {
 		$console = new ConsoleApplication();
 		$console->setAutoExit(false);
-		$console->setConfigLoaderCallback(function(InputInterface $input, $env=null, $devUser=null){
+		$console->setConfigLoaderCallback(function(InputInterface $input, $env=false, $devUser=false){
 			$this->assertEquals('test-env', $env);
-			$this->assertNull($devUser);
+			$this->assertEquals('test-dev', $devUser);
 
 			// test config
 			$mockConfigLoader = $this->getMock('Skip\ConfigLoader', array('load'), array(), '', FALSE);
-			$mockConfigLoader->expects($this->once())
+			$mockConfigLoader->expects($this->any())
 				->method('load')
 				->will($this->returnValue(array(
 					'console' => array(
@@ -48,7 +48,10 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
 		});
 
 		$tester = new ApplicationTester($console);
-        $tester->run(array());
+        $tester->run(array(
+        	'--env' => 'test-env',
+        	'--devuser' => 'test-dev'
+        	));
 	}
 
 }
