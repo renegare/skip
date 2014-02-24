@@ -30,7 +30,7 @@ The recommened way is to use composer to install skip in your project:
 }
 ```
 
-Note: The git flow I use, ensures that the ```master``` branch is always stable (or as I see fit). The ```development``` branch is bleeding edge, but could contain bugs! Commits merged to master are tagged so you can lock down to a particular version :).
+*NOTE:* The git flow I use, ensures that the ```master``` branch is always stable (or as I see fit). The ```development``` branch is bleeding edge, but could contain bugs! Commits merged to master are tagged so you can lock down to a particular version :).
 
 
 Web Application Usage
@@ -70,7 +70,7 @@ Then ```$app->configure()``` will go through the configuration and configure you
 
 Browse the code to see what is possible as it really is dead simple ... no huge learning curve. Hopefully it will get you up and running quickly :).
 
-Note: Please look through at the test ```WebApplicationTest``` for configuration specifics.
+*NOTE:* Please look through at the test ```WebApplicationTest``` for configuration specifics.
 
 
 Console Application Usage
@@ -132,7 +132,7 @@ Console Application has various 'features' you can configure to create the appli
 
 In addition to this, Skip provides the interface ```ContainerInterface```. Implementing this into your commands is recommended so you have access to the DI container (basically the web application) in your commands.
 
-WARNING: Keep your commands as lite/thin as possible. #IMO they should be like controllers where the heavy lifting (business/core logic) is implemented as a service. This keeps the your application code portable/resuable/decoupled. Your commands will also be better understood in 6 months from now ;)
+*WARNING:* Keep your commands as lite/thin as possible. #IMO they should be like controllers where the heavy lifting (business/core logic) is implemented as a service. This keeps the your application code portable/resuable/decoupled. Your commands will also be better understood in 6 months from now ;)
 
 Contributions/Pull Requests/Forks are welcome. Enjoy!
 
