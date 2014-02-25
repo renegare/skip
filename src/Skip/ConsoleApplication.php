@@ -24,9 +24,8 @@ class ConsoleApplication extends Application {
     /**
      * {@inheritdoc}
      */
-    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN', array $values = array()) {
+    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN') {
         parent::__construct($name, $version);
-        $this->values = $values;
     }
 
     /**
@@ -57,16 +56,22 @@ class ConsoleApplication extends Application {
     }
 
     /**
-     * creates and configures a new application.
+     * creates and configures a new application. should only need to call this when testing
+     * as it is automatically called when the application is run (see configureIO).
+     * this method is automic ... runs once and thats it!
+     * @param $input InputInterface required by configuration callback (called internally)
      * @return void
      */
-    protected function loadConfig(InputInterface $input = null) {
+    public function loadConfig(InputInterface $input) {
         if(!$this->callback) return;
         $callback = $this->callback;
         $configLoader = $callback($input, $input->getParameterOption('--env'), $input->getParameterOption('--devuser'));
         if($configLoader) {
-            $this->app = new WebApplication($this->values, $this);
+            if(!$this->app) {
+                $this->app = new WebApplication();
+            }
             $this->app->setConfigLoader($configLoader);
+            $this->app->setConsoleApplication($this);
             $this->app->configure();
         }
     }
@@ -77,6 +82,10 @@ class ConsoleApplication extends Application {
     public function configureIO(InputInterface $input, OutputInterface $output) {
         $this->loadConfig($input);
         return parent::configureIO($input, $output);
+    }
+
+    public function setServiceContainer(WebApplication $app) {
+        $this->app = $app;
     }
 
     public function getServiceContainer() {

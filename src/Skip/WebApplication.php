@@ -11,11 +11,14 @@
 	    /** @var ConsoleApplication */
 	    protected $console;
 
-	    public function __construct(array $values = array(), ConsoleApplication $console = null) {
-			$this->console = $console;
+	    public function __construct(array $values = array()) {
 			parent::__construct($values);
 	    }
 
+	    public function setConsoleApplication(ConsoleApplication $console) {
+	    	$this->console = $console;
+	    }
+	    
 		public function setConfigLoader(ConfigLoader $loader) {
 			$this->loader = $loader;
 		}

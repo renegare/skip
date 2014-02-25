@@ -3,6 +3,7 @@
 namespace Skip\Test\Console;
 
 use Skip\ConsoleApplication;
+use Skip\WebApplication;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Input\StringInput;
@@ -117,7 +118,7 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testGetServiceContainer() {
 
-		$console = new ConsoleApplication();
+		$console = new ConsoleApplication('','', array('TEST_VALUE'=>'yoyoyo'));
 		$console->setAutoExit(false);
 
 		$console->setConfigLoaderCallback(function(InputInterface $input, $env=false, $devUser=false){
@@ -125,9 +126,18 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
 			$mockConfigLoader = $this->getMock('Skip\ConfigLoader', array('load'), array(), '', FALSE);
 			$mockConfigLoader->expects($this->once())
 				->method('load')
-				->will($this->returnValue(array()));
+				->will($this->returnValue(array(
+					'settings' => array(
+						'debug'=>true, 
+						'test.setting' => array('test value'), 
+						'provider.setting' => 'override_defaults',
+						'another.service' => 'TEST_VALUE'),
+					)));
 			return $mockConfigLoader;
 		});
+
+		$serviceContainer = new WebApplication();
+		$console->setServiceContainer($serviceContainer);
 
 		$tester = new ApplicationTester($console);
         $tester->run(array()); 
@@ -138,6 +148,8 @@ class ConsoleApplicationTest extends \PHPUnit_Framework_TestCase {
          * Therefore run the application, grab the service container, mock out what you want AND then run your assertions.
          * @hopefully: will think of a better solution to testing that reads better
          */
-        $this->assertInstanceOf('Pimple', $console->getServiceContainer());
+        $app = $console->getServiceContainer();
+        $this->assertSame($app, $serviceContainer);
+        $this->assertInstanceOf('Pimple', $app);
 	}
 }
