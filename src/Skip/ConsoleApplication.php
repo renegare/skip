@@ -18,11 +18,15 @@ class ConsoleApplication extends Application {
     /** @var WebApplication */
     protected $app;
 
+    /** @var array */
+    protected $values;
+
     /**
      * {@inheritdoc}
      */
-    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN') {
+    public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN', array $values = array()) {
         parent::__construct($name, $version);
+        $this->values = $values;
     }
 
     /**
@@ -61,7 +65,7 @@ class ConsoleApplication extends Application {
         $callback = $this->callback;
         $configLoader = $callback($input, $input->getParameterOption('--env'), $input->getParameterOption('--devuser'));
         if($configLoader) {
-            $this->app = new WebApplication(array(), $this);
+            $this->app = new WebApplication($this->values, $this);
             $this->app->setConfigLoader($configLoader);
             $this->app->configure();
         }
