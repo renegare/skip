@@ -21,6 +21,9 @@ class ConsoleApplication extends Application {
     /** @var array */
     protected $values;
 
+    /** @var boolean */
+    protected $configLoaded = false;
+
     /**
      * {@inheritdoc}
      */
@@ -58,12 +61,13 @@ class ConsoleApplication extends Application {
     /**
      * creates and configures a new application. should only need to call this when testing
      * as it is automatically called when the application is run (see configureIO).
-     * this method is automic ... runs once and thats it!
+     * this method is idempotent ... runs once and thats it!
      * @param $input InputInterface required by configuration callback (called internally)
      * @return void
      */
     public function loadConfig(InputInterface $input) {
-        if(!$this->callback) return;
+        if($this->configLoaded || !$this->callback) return;
+        $this->configLoaded = true;
         $callback = $this->callback;
         $configLoader = $callback($input, $input->getParameterOption('--env'), $input->getParameterOption('--devuser'));
         if($configLoader) {
