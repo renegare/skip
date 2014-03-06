@@ -16,6 +16,14 @@ The idea behind wrapping these two libraries is provide a starting point for new
 The aim/goal however is to 'skip' the manual setup/configuration of these libraries (amazing tools but annoying learning curve) and put all that stuff in a json file somewhere. I hope this will allow developers to focus better on their application development.
 
 
+Requirements
+------------
+
+Take look at 
+```
+$ composer update && vendor/bin/phpunit
+```
+
 Installation
 ------------
 
@@ -28,7 +36,16 @@ The recommened way is to use composer to install skip in your project:
 }
 ```
 
-*NOTE:* The git flow I use, ensures that the ```master``` branch is always stable (or as I see fit). The ```development``` branch is bleeding edge, but could contain bugs! Commits merged to master are tagged so you can lock down to a particular version :).
+
+Test
+----
+
+Check out the repo and from the top level directory run the following command:
+```
+$ composer update && vendor/bin/phpunit
+```
+
+*NOTE:* You need composer installed on your machine
 
 
 Web Application Usage
@@ -48,16 +65,20 @@ $app->run();
 
 ```
 
-Now you can do this (dont be fooled, it is less PHP code):
+Now you can do this:
 
 ```
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
 
 $configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
-$loader = new Skip\ConfigLoader($configPaths);
+
+// used to replace 'placeholders' in you configuration (e.g "param1": "#RANDOM_ENV_VAR_1#/goes/here")
+$placeholders = array('RANDOM_ENV_VAR_1' => 'something', 'RANDOM_ENV_VAR_2' => '2'); 
+$loader = new Skip\ConfigLoader($configPaths, null, $placeholders);
+
 $app = new Skip\WebApplication();
-$app->setConfigLoader($this->getConfigLoader());
+$app->setConfigLoader($loader);
 $app->configure();
 $app->run();
 ```
@@ -83,7 +104,10 @@ require_once __DIR__.'/vendor/autoload.php';
 $app = new Skip\ConsoleApplication();
 $app->setConfigLoaderCallback(function(Symfony\Component\Console\Input\InputInterface $input, $env, $devUser) {
     $configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
-    $loader = new Skip\ConfigLoader($configPaths);
+
+    $placeholders = array('RANDOM_ENV_VAR_1' => 'something', 'RANDOM_ENV_VAR_2' => '2'); 
+	$loader = new Skip\ConfigLoader($configPaths, null, $placeholders);
+
     return $loader;
 });
 $app->run();
@@ -109,12 +133,7 @@ Silex Application has various 'features' you can configure to create the applica
 2. Settings
 3. Routes
 4. Services
-
-I am keen to implement the following in the future:
-
-* Configuration placeholders (starts to get messy!)
-
-After that I think it would be pretty comprehensive and need not get more complicated than that (as this is only a framework wrapper ... not a framework).
+5. Configuration placeholders
 
 Contributions/Pull Requests/Forks are welcome. Enjoy!
 
@@ -128,22 +147,16 @@ Console Application has various 'features' you can configure to create the appli
 
 In addition to this, Skip provides the interface ```ContainerInterface```. Implementing this into your commands is recommended so you have access to the DI container (basically the web application) in your commands.
 
-*WARNING:* Keep your commands as lite/thin as possible. #IMO they should be like controllers where the heavy lifting (business/core logic) is implemented as a service. This keeps the your application code portable/resuable/decoupled. Your commands will also be better understood in 6 months from now ;)
+*WARNING:* Keep your commands as lite/thin as possible. #IMO they should be like controllers where all heavy lifting (business/core logic) are implemented as a services. This keeps the your application code portable/resuable/decoupled/testable. Your commands will also be better understood in 6 months from now ;)
 
 Contributions/Pull Requests/Forks are welcome. Enjoy!
-
-
-Testing
--------
-
-```[project root]$ composer update && /vendor/bin/phpunit --coverage-text```
 
 
 TODOS (That I can think of)
 ---------------------------
 
 - [ ] Support for other appropriate config file types
-- [ ] Simple config level cache mechanism
+- [ ] Simple config level cache mechanism (e.g APC)
 - [ ] Documentation with examples (Please see ```test/src/Skip/Test``` for examples)
 - [ ] Cover all the various ways silex can be configured (low priority)
 - [ ] Cover all the various ways symfony console component can be configured (low priority)
