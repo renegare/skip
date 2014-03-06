@@ -7,7 +7,7 @@ class GenericTestClass {
 	public $deps = array();
 	public $params = array();
 
-	public function __construct($dep1, $dep2) {
+	public function __construct($dep1=null, $dep2=null) {
 		$this->deps[] = $dep1;
 		$this->deps[] = $dep2;
 	}

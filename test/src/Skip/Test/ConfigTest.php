@@ -280,6 +280,22 @@
 
 			$this->assertEquals($serviceSetting['set']['param_a'], $service->params[0]);
 			$this->assertEquals($mockApplication['another.service'], $service->params[1]);
+		}
 
+		/**
+		 * test configureService with no deps
+		 */
+		public function testConfigureServiceWithNoDeps() {
+			$serviceName = 'test.service';
+			$serviceSetting = array(
+				        'class' => 'Skip\Test\Helper\GenericTestClass'
+					);
+
+			$mockApplication = new Application;
+
+			$config = new Config($mockApplication);
+			$config->configureService($serviceName, $serviceSetting);
+
+			$service = $mockApplication[$serviceName];
 		}
 	}

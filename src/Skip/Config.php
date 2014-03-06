@@ -83,7 +83,8 @@
                 $class = new \ReflectionClass( $settings['class'] );
 
                 $arguments = array();
-                foreach( $settings['deps'] as $key ) {
+                $deps = isset($settings['deps'])? $settings['deps'] : array();
+                foreach($deps as $key ) {
                     if(is_string($key) && preg_match('/^%(.+)%$/', $key, $matches)) {
                         $key = $matches[1];
                         $value = $this->app[$key];
