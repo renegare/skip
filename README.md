@@ -19,10 +19,7 @@ The aim/goal however is to 'skip' the manual setup/configuration of these librar
 Requirements
 ------------
 
-Take look at 
-```
-$ composer update && vendor/bin/phpunit
-```
+#TBC
 
 Installation
 ------------
