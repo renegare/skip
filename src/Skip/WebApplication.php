@@ -11,6 +11,9 @@
 	    /** @var ConsoleApplication */
 	    protected $console;
 
+	    /** @var ConfigLoader */
+	    protected $loader;
+
 	    public function __construct(array $values = array()) {
 			parent::__construct($values);
 	    }
