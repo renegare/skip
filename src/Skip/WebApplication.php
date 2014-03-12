@@ -42,8 +42,8 @@
 			}
 
 			if(isset($configuration['routes'])) {
-				foreach($configuration['routes'] as $route) {
-					$config->configureRoute($route);
+				foreach($configuration['routes'] as $routeName => $route) {
+					$config->configureRoute($route, $routeName);
 				}
 			}
 
