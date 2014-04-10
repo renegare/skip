@@ -156,7 +156,6 @@ Contributions/Pull Requests/Forks are welcome. Enjoy!
 TODOS (That I can think of)
 ---------------------------
 
-- [ ] Write test to ensure $routeName is set per route
 - [ ] Support for other appropriate config file types
 - [ ] Simple config level cache mechanism (e.g APC)
 - [ ] Documentation with examples (Please see ```test/src/Skip/Test``` for examples)
