@@ -2,15 +2,19 @@
     
     namespace Skip;
 
-    use Silex\Application;
     use Skip\Util\Reflection;
 
     class Config {
 
         protected $app;
 
-        public function __construct(Application $app) {
+        protected $console;
+
+        protected $reflection;
+
+        public function __construct(WebApplication $app, ConsoleApplication $console=null) {
             $this->app = $app;
+            $this->console = $console;
             $this->reflection = new Reflection();
         }
 
@@ -75,11 +79,12 @@
         }
 
         public function configureService($serviceName, array $settings) {
-            $this->app[$serviceName] = $this->app->share(function(Application $app) use ($settings){
+            $this->app[$serviceName] = $this->app->share(function(WebApplication $app) use ($settings){
                 $class = new \ReflectionClass( $settings['class'] );
 
                 $arguments = array();
-                foreach( $settings['deps'] as $key ) {
+                $deps = isset($settings['deps'])? $settings['deps'] : array();
+                foreach($deps as $key ) {
                     if(is_string($key) && preg_match('/^%(.+)%$/', $key, $matches)) {
                         $key = $matches[1];
                         $value = $this->app[$key];
@@ -107,5 +112,13 @@
                 }
                 return $instance;
             });
+        }
+
+        public function configureCommand($commandClassName){
+            $command = new $commandClassName;
+            if($command instanceof ContainerInterface) {
+                $command->setContainer($this->app);
+            }
+            $this->console->add($command);
         }
     }

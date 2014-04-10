@@ -10,7 +10,10 @@
 
         public function createClient(array $server = array(), WebApplication $app=null)
         {
-            return new Client( $app ? $app : $this->createApplication(), $server);
+        	if(!$app) {
+        		$app = $this->createApplication();
+        	}
+            return new Client($app, $server);
         }
 
         abstract public function getConfigLoader();

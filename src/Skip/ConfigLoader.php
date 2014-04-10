@@ -50,6 +50,7 @@
 		 *
 		 * @return array
 		 *
+		 * @todo add a way to cache (e.g. using APC)
 		 * @todo support yaml and ini config loading
 		 * @todo throw exceptions ;)
 		 * @todo loading errors need to throw concise exceptions and not fail silently

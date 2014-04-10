@@ -1,8 +1,8 @@
 {
     "name": "renegare/skip",
     "description": "Simple configuration layer around silex framework. With the aim of reducing spin up times with 'green field' projects.",
-    "keywords": ["silex", "config", "renegare"],
-    "license": "MIT",
+    "keywords": ["silex", "symfony", "console", "config", "json", "renegare", "skip"],
+    "license": "BWL",
     "authors": [
         {
             "name": "Mudi Ugbowanko",
@@ -10,7 +10,7 @@
         }
     ],
 
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
 
     "autoload": {
         "psr-0": {
@@ -19,9 +19,11 @@
     },
 
     "require": {
+        "php": ">=5.4.0",
         "symfony/finder": ">=2.3,<2.5-dev",
         "silex/silex": ">=1.0",
-        "seld/jsonlint": "1.1.2"
+        "seld/jsonlint": "1.1.2",
+        "symfony/console": ">=v2.4.1,<2.5-dev"
     },
 
     "require-dev": {

@@ -8,18 +8,26 @@ branches:
 php:
   - 5.5
   - 5.4
+  - 5.6
+  - hhvm
 
 env:
-  - SILEX_VERSION=1.0.*
+  - SILEX_VERSION=1.2.*
   - SILEX_VERSION=1.1.*
-  - SILEX_VERSION=dev-master
+  - SILEX_VERSION=1.0.*
 
 before_script:
   - php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
   - php composer.phar require --prefer-source silex/silex:${SILEX_VERSION}
 
-script: vendor/bin/phpunit --coverage-text
+script: vendor/bin/phpunit
 
 notifications:
   email:
     - mudi@renegare.com
+
+matrix:
+  allow_failures:
+    - php: 5.6
+    - php: hhvm
+  fast_finish: true
