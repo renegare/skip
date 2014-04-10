@@ -9,7 +9,7 @@ Skip README
 What is Skip?
 -------------
 
-Skip is a configuration wrapper around [Silex (PHP microframework)][1] and [Symfony Console Component][2]. 
+Skip is a configuration wrapper around [Silex (PHP microframework)][1] and [Symfony Console Component][2].
 
 The idea behind wrapping these two libraries is provide a starting point for new projects that require a *simple* web app and a cli interface.
 
@@ -19,7 +19,8 @@ The aim/goal however is to 'skip' the manual setup/configuration of these librar
 Requirements
 ------------
 
-#TBC
+* PHP 5.4
+* composer (preferably latest)
 
 Installation
 ------------
@@ -27,12 +28,13 @@ Installation
 The recommened way is to use composer to install skip in your project:
 ```
 "require": {
-	...
-	"renegare/skip": "master-dev"
-	...
+    ...
+    "renegare/skip": "master-dev"
+    ...
 }
 ```
 
+Note: you can require your own version of silex, as long as it is greater than the minimalist defined version in composer.json.
 
 Test
 ----
@@ -71,7 +73,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 $configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
 
 // used to replace 'placeholders' in you configuration (e.g "param1": "#RANDOM_ENV_VAR_1#/goes/here")
-$placeholders = array('RANDOM_ENV_VAR_1' => 'something', 'RANDOM_ENV_VAR_2' => '2'); 
+$placeholders = array('RANDOM_ENV_VAR_1' => 'something', 'RANDOM_ENV_VAR_2' => '2');
 $loader = new Skip\ConfigLoader($configPaths, null, $placeholders);
 
 $app = new Skip\WebApplication();
@@ -102,8 +104,8 @@ $app = new Skip\ConsoleApplication();
 $app->setConfigLoaderCallback(function(Symfony\Component\Console\Input\InputInterface $input, $env, $devUser) {
     $configPaths = array(__DIR__ . '/config', __DIR__ . '/dev/config', __DIR__ . '/live/config');
 
-    $placeholders = array('RANDOM_ENV_VAR_1' => 'something', 'RANDOM_ENV_VAR_2' => '2'); 
-	$loader = new Skip\ConfigLoader($configPaths, null, $placeholders);
+    $placeholders = array('RANDOM_ENV_VAR_1' => 'something', 'RANDOM_ENV_VAR_2' => '2');
+    $loader = new Skip\ConfigLoader($configPaths, null, $placeholders);
 
     return $loader;
 });
@@ -158,8 +160,6 @@ TODOS (That I can think of)
 - [ ] Support for other appropriate config file types
 - [ ] Simple config level cache mechanism (e.g APC)
 - [ ] Documentation with examples (Please see ```test/src/Skip/Test``` for examples)
-- [ ] Cover all the various ways silex can be configured (low priority)
-- [ ] Cover all the various ways symfony console component can be configured (low priority)
 
 [1]: http://silex.sensiolabs.org/doc/usage.html
 [2]: http://symfony.com/doc/current/components/console/introduction.html
