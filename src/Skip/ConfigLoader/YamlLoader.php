@@ -9,6 +9,10 @@ class YamlLoader implements \Skip\AbstractConstantConfigLoaderInterface {
      */
     public function load($filePath) {
         $yaml = new Parser();
+        $filePath = realPath($filePath);
+        if(!$filePath) {
+            throw new \InvalidArgumentException(sprintf('Constant File Does not Exist! %s', $filePath));
+        }
         return $yaml->parse(file_get_contents($filePath));
     }
 }

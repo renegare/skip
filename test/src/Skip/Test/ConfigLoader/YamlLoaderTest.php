@@ -14,4 +14,12 @@ class YamlLoaderTest extends \PHPUnit_Framework_TestCase {
         $this->assertArrayHasKey('language', $config);
         $this->assertEquals('php', $config['language']);
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testLoadNonExistingFile() {
+        $loader = new YamlLoader();
+        $config = $loader->load('travis.yml');
+    }
 }
