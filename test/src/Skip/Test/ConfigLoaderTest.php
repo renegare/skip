@@ -103,30 +103,50 @@
         * test loading a yaml constant file
         */
         public function testConstantLoading() {
-            $mockFinder = $this->getMockFinder();
+            $randomValue = rand(0, 1000);
+            $explicitConstant = 'explicit-' . $randomValue;
+            $file1Constant = 'file1-' . $randomValue;
+            $file2Constant = 'file2-' . $randomValue;
+
+            $mockConfig = array(
+                'json' => json_encode([
+                    'EXPLICIT_CONSTANT' => '#EXPLICIT_CONSTANT#',
+                    'FILE_CONSTANT_1' => '#FILE_CONSTANT_1#',
+                    'FILE_CONSTANT_2' => '#FILE_CONSTANT_2#',
+                ]));
+            $mockFinder = $this->getMockFinder($mockConfig);
+
             $mockConstantLoader = $this->getMockBuilder('Skip\AbstractConstantConfigLoaderInterface')
                 ->disableOriginalConstructor()
                 ->getMock();
             $mockConstantLoader->expects($this->exactly(2))
                 ->method('load')
-                ->will($this->returnCallback(function($filePath) {
-                    if($filePath == '/file/exists/constants-b.yml') {
-                        return array('param'=>'value');
+                ->will($this->returnCallback(function($filePath) use ($file1Constant, $file2Constant){
+                    switch($filePath) {
+                        case 'app-constants.yml':
+                            return ['FILE_CONSTANT_1' => $randomValue];
+                        case 'app-constants.yml.dist':
+                            return [
+                                'FILE_CONSTANT_1' => 'THIS_VALUE_SHOULD_BE_OVERWRITTEN',
+                                'FILE_CONSTANT_2' => $randomValue
+                            ];
                     }
-
                     throw new \Exception('This file does not exist!');
                 }));
 
             $loader = new ConfigLoader(array('dir1'), $mockFinder);
             $loader->setConstantLoader($mockConstantLoader);
-            $constants = $loader->loadConstants(array(
-                '/file/does/not/exist/constants-a.yml',
-                '/file/exists/constants-b.yml',
-            ));
+            $loader->setConstants(array('EXPLICIT_CONSTANT' => $explicitConstant), [
+                'app-constants.yml',
+                'app-constants.yml.dist'
+            ]);
+            $config = $this->load();
 
             $this->assertEquals(array(
-                'param' => 'value'
-            ), $constants);
+                'EXPLICIT_CONSTANT' => $explicitConstant,
+                'FILE_CONSTANT_1' => $file1Constant,
+                'FILE_CONSTANT_2' => $file2Constant
+            ), $config);
         }
 
         public function testYamlConstantLoaderIsUsedByDefault() {
