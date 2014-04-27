@@ -18,6 +18,8 @@
 		/** @var $finder array */
 		protected $constants;
 
+		/** @var $constantLoader AbstractConstantConfigLoaderInterface */
+		protected $constantLoader;
 
 		/**
 		 * Constructor!
@@ -98,13 +100,20 @@
 		}
 
 		public function getConstantLoader() {
+			if(!$this->constantLoader) {
+				$this->constantLoader = new ConfigLoader\YamlLoader;
+			}
 			return $this->constantLoader;
 		}
 
 		public function loadConstants($files) {
 			$loader = $this->getConstantLoader();
 			foreach($files as $file) {
-				$constants = $loader->load($file);
+				try {
+					$constants = $loader->load($file);
+				} catch(\Exception $e) {
+					$constants = null;
+				}
 
 				if(!$constants) continue;
 

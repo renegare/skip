@@ -8,7 +8,7 @@
 
 	class ConfigLoaderTest extends \PHPUnit_Framework_TestCase {
 
-		public function getMockFinder($mockConfigContent) {
+		public function getMockFinder($mockConfigContent = array()) {
 
 			$files = array();
 			foreach( $mockConfigContent as $type => $config ) {
@@ -102,25 +102,23 @@
 		/**
 		* test loading a yaml constant file
 		*/
-		public function testYamlConstantLoading() {
-			$mockConfigContent = $mockConfigContent = array(
-				'json' => '{invalid:"config"}'
-			);
-			$mockFinder = $this->getMockFinder($mockConfigContent);
-
-			$mockYamlLoader = $this->getMockBuilder('Skip\AbstractConstantConfigLoaderInterface')
+		public function testConstantLoading() {
+			$mockFinder = $this->getMockFinder();
+			$mockConstantLoader = $this->getMockBuilder('Skip\AbstractConstantConfigLoaderInterface')
 				->disableOriginalConstructor()
 				->getMock();
-			$mockYamlLoader->expects($this->exactly(2))
+			$mockConstantLoader->expects($this->exactly(2))
 				->method('load')
 				->will($this->returnCallback(function($filePath) {
 					if($filePath == '/file/exists/constants-b.yml') {
 						return array('param'=>'value');
 					}
+
+					throw new \Exception('This file does not exist!');
 				}));
 
 			$loader = new ConfigLoader(array('dir1'), $mockFinder);
-			$loader->setConstantLoader($mockYamlLoader);
+			$loader->setConstantLoader($mockConstantLoader);
 			$constants = $loader->loadConstants(array(
 				'/file/does/not/exist/constants-a.yml',
 				'/file/exists/constants-b.yml',
@@ -129,5 +127,13 @@
 			$this->assertEquals(array(
 				'param' => 'value'
 			), $constants);
+		}
+
+		public function testYamlConstantLoaderIsUsedByDefault() {
+			$mockFinder = $this->getMockFinder();
+			$loader = new ConfigLoader(array('dir1'), $mockFinder);
+			$yamlLoader = $loader->getConstantLoader();
+			$this->assertInstanceOf('Skip\AbstractConstantConfigLoaderInterface', $yamlLoader);
+			$this->assertInstanceOf('Skip\ConfigLoader\YamlLoader', $yamlLoader);
 		}
 	}

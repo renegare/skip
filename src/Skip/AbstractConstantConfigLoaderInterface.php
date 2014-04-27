@@ -2,8 +2,6 @@
 
 namespace Skip;
 
-use Skip\Util\Reflection;
-
 interface AbstractConstantConfigLoaderInterface {
     /**
      * load a config file
