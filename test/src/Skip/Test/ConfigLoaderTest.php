@@ -136,10 +136,10 @@
 
             $loader = new ConfigLoader(array('dir1'), $mockFinder);
             $loader->setConstantLoader($mockConstantLoader);
-            $loader->setConstants(array('EXPLICIT_CONSTANT' => $explicitConstant), [
+            $loader->setConstants(
+                ['EXPLICIT_CONSTANT' => $explicitConstant],
                 'app-constants.yml',
-                'app-constants.yml.dist'
-            ]);
+                'app-constants.yml.dist');
             $config = $this->load();
 
             $this->assertEquals(array(

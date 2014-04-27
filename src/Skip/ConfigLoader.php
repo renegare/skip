@@ -106,7 +106,9 @@
             return $this->constantLoader;
         }
 
-        public function loadConstants($files) {
+        public function setConstants() {
+            $args = func_get_args();
+            print_r($args); die;
             $loader = $this->getConstantLoader();
             foreach($files as $file) {
                 try {
