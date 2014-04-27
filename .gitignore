@@ -2,3 +2,4 @@ vendor/
 tmp/
 .DS_Store
 test-coverage/
+coverage_report/

@@ -124,11 +124,11 @@
                 ->will($this->returnCallback(function($filePath) use ($file1Constant, $file2Constant){
                     switch($filePath) {
                         case 'app-constants.yml':
-                            return ['FILE_CONSTANT_1' => $randomValue];
+                            return ['FILE_CONSTANT_1' => $file1Constant];
                         case 'app-constants.yml.dist':
                             return [
                                 'FILE_CONSTANT_1' => 'THIS_VALUE_SHOULD_BE_OVERWRITTEN',
-                                'FILE_CONSTANT_2' => $randomValue
+                                'FILE_CONSTANT_2' => $file2Constant
                             ];
                     }
                     throw new \Exception('This file does not exist!');
@@ -140,7 +140,7 @@
                 ['EXPLICIT_CONSTANT' => $explicitConstant],
                 'app-constants.yml',
                 'app-constants.yml.dist');
-            $config = $this->load();
+            $config = $loader->load();
 
             $this->assertEquals(array(
                 'EXPLICIT_CONSTANT' => $explicitConstant,

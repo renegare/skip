@@ -85,6 +85,7 @@
         }
 
         public function doReplace($config) {
+
             foreach($this->constants as $key => $constant) {
                 $config = preg_replace('/#'.$key.'#/', $constant, $config);
             }
@@ -107,24 +108,30 @@
         }
 
         public function setConstants() {
-            $args = func_get_args();
-            print_r($args); die;
+            $args = array_reverse(func_get_args());
+            $constants = $this->constants;
             $loader = $this->getConstantLoader();
-            foreach($files as $file) {
-                try {
-                    $constants = $loader->load($file);
-                } catch(\Exception $e) {
-                    $constants = null;
+            foreach($args as $constantConfig) {
+
+                if(is_string($constantConfig)) {
+                    try {
+                        $constantConfig = $loader->load($constantConfig);
+                    } catch (\Exception $e) {
+                        $constantConfig = null;
+                    }
                 }
 
-                if(!$constants) continue;
-
-                if($this->isValidConstants($constants)) {
-                    return $constants;
+                if(!is_array($constantConfig)) {
+                    $constantConfig = array();
                 }
+
+                if(!$this->isValidConstants($constantConfig)) {
+                    $constantConfig = array();
+                }
+
+                $constants = array_merge($constants, $constantConfig);
             }
-
-            throw new \Exception('No contant files found!');
+            $this->constants = $constants;
         }
 
         public function isValidConstants(array $values) {
