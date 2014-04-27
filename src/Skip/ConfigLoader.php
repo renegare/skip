@@ -1,5 +1,5 @@
 <?php
-	
+
 	namespace Skip;
 
 	use Symfony\Component\Finder\Finder;
@@ -39,7 +39,7 @@
 			$finder->files()->name('*.json');
 			$this->finder = $finder;
 
-			
+
 			foreach($includePaths as $path) {
 				$finder->in($path);
 			}
@@ -68,7 +68,7 @@
 							$config = $this->doReplace($file->getContents());
 							$e = $parser->lint($config);
 							if($e) throw $e;
-							$config = json_decode($config, true); 
+							$config = json_decode($config, true);
 							break;
 					}
 					if($config) {
@@ -93,4 +93,37 @@
 			return $this->finder;
 		}
 
+		public function setConstantLoader(AbstractConstantConfigLoaderInterface $loader) {
+			$this->constantLoader = $loader;
+		}
+
+		public function getConstantLoader() {
+			return $this->constantLoader;
+		}
+
+		public function loadConstants($files) {
+			$loader = $this->getConstantLoader();
+			foreach($files as $file) {
+				$constants = $loader->load($file);
+
+				if(!$constants) continue;
+
+				if($this->isValidConstants($constants)) {
+					return $constants;
+				}
+			}
+
+			throw new \Exception('No contant files found!');
+		}
+
+		public function isValidConstants(array $values) {
+			$allowedTypes = array('string', 'int', 'boolean');
+			foreach($values as $key => $value) {
+				$type = gettype($value);
+				if(!in_array($type, $allowedTypes)) {
+					throw new \Exception(sprintf('Unsupported value %s', $type));
+				}
+			}
+			return true;
+		}
 	}

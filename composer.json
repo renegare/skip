@@ -23,7 +23,8 @@
         "symfony/finder": ">=2.3,<2.5-dev",
         "silex/silex": ">=1.0",
         "seld/jsonlint": "1.1.2",
-        "symfony/console": ">=v2.4.1,<2.5-dev"
+        "symfony/console": ">=v2.4.1,<2.5-dev",
+        "symfony/yaml": "~2.0"
     },
 
     "require-dev": {

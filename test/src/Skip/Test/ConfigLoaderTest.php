@@ -1,5 +1,5 @@
 <?php
-	
+
 	namespace Skip\Test;
 
 	use Silex\Application;
@@ -16,10 +16,10 @@
 					->disableOriginalConstructor()
 					->setMethods(array('getContents', 'getExtension'))
 					->getMock();
-				$mockFile->expects($this->once())
+				$mockFile->expects($this->any())
 					->method('getContents')
 					->will($this->returnValue($config));
-				$mockFile->expects($this->once())
+				$mockFile->expects($this->any())
 					->method('getExtension')
 					->will($this->returnValue($type));
 
@@ -34,7 +34,7 @@
 				->disableOriginalConstructor()
 				->setMethods(array('files', 'getIterator', 'in', 'name'))
 				->getMock();
-			$mockFinder->expects($this->once())
+			$mockFinder->expects($this->any())
 				->method('files')
 				->will($this->returnValue($mockFinder));
 			$mockFinder->expects($this->any())
@@ -43,7 +43,7 @@
 			$mockFinder->expects($this->any())
 				->method('any')
 				->will($this->returnValue($mockFinder));
-			$mockFinder->expects($this->once())
+			$mockFinder->expects($this->any())
 				->method('getIterator')
 				->will($this->returnValue($mockIterator));
 
@@ -85,7 +85,7 @@
 			$this->assertArrayHasKey('param1', $loadedConfig);
 			$this->assertEquals('value2', $loadedConfig['param1']);
 		}
-		
+
 		/**
 		 * @expectedException Skip\InvalidConfigException
 		 */
@@ -93,10 +93,41 @@
 			$mockConfigContent = $mockConfigContent = array(
 				'json' => '{invalid:"config"}'
 			);
-
 			$mockFinder = $this->getMockFinder($mockConfigContent);
 
 			$loader = new ConfigLoader(array('dir1'), $mockFinder);
 			$loadedConfig = $loader->load();
+		}
+
+		/**
+		* test loading a yaml constant file
+		*/
+		public function testYamlConstantLoading() {
+			$mockConfigContent = $mockConfigContent = array(
+				'json' => '{invalid:"config"}'
+			);
+			$mockFinder = $this->getMockFinder($mockConfigContent);
+
+			$mockYamlLoader = $this->getMockBuilder('Skip\AbstractConstantConfigLoaderInterface')
+				->disableOriginalConstructor()
+				->getMock();
+			$mockYamlLoader->expects($this->exactly(2))
+				->method('load')
+				->will($this->returnCallback(function($filePath) {
+					if($filePath == '/file/exists/constants-b.yml') {
+						return array('param'=>'value');
+					}
+				}));
+
+			$loader = new ConfigLoader(array('dir1'), $mockFinder);
+			$loader->setConstantLoader($mockYamlLoader);
+			$constants = $loader->loadConstants(array(
+				'/file/does/not/exist/constants-a.yml',
+				'/file/exists/constants-b.yml',
+			));
+
+			$this->assertEquals(array(
+				'param' => 'value'
+			), $constants);
 		}
 	}
