@@ -2,7 +2,7 @@
     "name": "renegare/skip",
     "description": "Simple configuration layer around silex framework. With the aim of reducing spin up times with 'green field' projects.",
     "keywords": ["silex", "symfony", "console", "config", "json", "renegare", "skip"],
-    "license": "BWL",
+    "license": "MIT",
     "authors": [
         {
             "name": "Mudi Ugbowanko",
