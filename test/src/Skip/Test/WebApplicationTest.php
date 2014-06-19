@@ -1,59 +1,67 @@
 <?php
-	
-	namespace Skip\Test;
 
-	use Skip\WebApplication;
-	use Skip\WebApplicationTestCase;
+namespace Skip\Test;
 
-	class WebApplicationTest extends WebApplicationTestCase {
+use Skip\WebApplication;
+use Skip\WebApplicationTestCase;
 
-		public function getConfigLoader() {
-			$mockConfig = array(
-				'providers' => array(
-					array(
-						'class'=>'Skip\\Test\\Helper\\TestServiceProvider', 
-						'params'=>array('provider.setting' => true))),
-				'settings' => array(
-					'debug'=>true, 
-					'test.setting' => array('test value'), 
-					'provider.setting' => 'override_defaults',
-					'another.service' => '%another.service%'),
-				'routes' => array(
-					'test' => array('route'=>'/test', 'controller'=>'Skip\\Test\\Helper\\TestServiceProvider::testAction')),
-				'services' => array(
-					'test.service' => array(
-				        'class' => 'Skip\Test\Helper\GenericTestClass',
-				        'deps' => array('dep_value', '%another.service%'),
-				        'set' => array(
-				            'param_a' => 'value_a',
-				            'param_b' => '%another.service%'
-				        )
-					))
-			);
-			
-			$mockConfigLoader = $this->getMockBuilder('Skip\ConfigLoader')
-				->disableOriginalConstructor()
-				->setMethods(array('load'))
-				->getMock();
-			$mockConfigLoader->expects($this->once())
-				->method('load')
-				->will($this->returnValue($mockConfig));
+class WebApplicationTest extends WebApplicationTestCase {
 
-			return $mockConfigLoader;
-		}
+    public function getConfigLoader() {
+        $mockConfig = array(
+            'providers' => array(
+                array(
+                    'class'=>'Skip\\Test\\Helper\\TestServiceProvider',
+                    'params'=>array('provider.setting' => true))),
+            'settings' => array(
+                'debug'=>true,
+                'test.setting' => array('test value'),
+                'provider.setting' => 'override_defaults',
+                'another.service' => '%another.service%'),
+            'routes' => array(
+                'test' => array('route'=>'/test', 'controller'=>'Skip\\Test\\Helper\\TestServiceProvider::testAction')),
+            'services' => array(
+                'test.service' => array(
+                    'class' => 'Skip\Test\Helper\GenericTestClass',
+                    'deps' => array('dep_value', '%another.service%'),
+                    'set' => array(
+                        'param_a' => 'value_a',
+                        'param_b' => '%another.service%'
+                    )
+                ))
+        );
 
-		public function testCreateApplication() {
-			$app = $this->createApplication();
-			$this->assertEquals($app['test.setting'][0], 'test value');
-			$this->assertEquals($app['provider'], 'override_defaults');
-		}
+        $mockConfigLoader = $this->getMockBuilder('Skip\ConfigLoader')
+            ->disableOriginalConstructor()
+            ->setMethods(array('load'))
+            ->getMock();
+        $mockConfigLoader->expects($this->once())
+            ->method('load')
+            ->will($this->returnValue($mockConfig));
 
-		public function testCreateClient() {
-			$client = $this->createClient();
+        return $mockConfigLoader;
+    }
 
-            $crawler = $client->request('GET', '/test');
-            $response = $client->getResponse();
+    public function testCreateApplication() {
+        $this->assertInstanceOf('Silex\Application', $this->createApplication());
+    }
 
-			$this->assertTrue($response->isOK());
-		}
-	}
+    public function testCreateClient() {
+		$app = $this->createApplication();
+		$app->setConfigLoader($this->getConfigLoader());
+		$app->configure();
+
+        $client = $this->createClient([], $app);
+
+        $crawler = $client->request('GET', '/test');
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isOK());
+
+
+		$client = $this->createClient();
+		$crawler = $client->request('GET', '/test');
+		$response = $client->getResponse();
+		$this->assertFalse($response->isOK());
+    }
+}
