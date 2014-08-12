@@ -135,7 +135,7 @@
         }
 
         public function isValidConstants(array $values) {
-            $allowedTypes = array('string', 'int', 'boolean');
+            $allowedTypes = array('string', 'int', 'integer', 'boolean');
             foreach($values as $key => $value) {
                 $type = gettype($value);
                 if(!in_array($type, $allowedTypes)) {
