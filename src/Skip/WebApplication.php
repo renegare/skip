@@ -1,5 +1,5 @@
 <?php
-	
+
 	namespace Skip;
 
 	use Silex\Application as Application;
@@ -21,7 +21,7 @@
 	    public function setConsoleApplication(ConsoleApplication $console) {
 	    	$this->console = $console;
 	    }
-	    
+
 		public function setConfigLoader(ConfigLoader $loader) {
 			$this->loader = $loader;
 		}
@@ -36,7 +36,13 @@
 					$config->configureProvider($provider);
 				}
 			}
-			
+
+			if(isset($configuration['controllers'])) {
+				foreach($configuration['controllers'] as $provider) {
+					$config->configureControllerProvider($provider['mount'], $provider['class']);
+				}
+			}
+
 			if(isset($configuration['settings'])) {
 				$config->configureSettings($configuration['settings']);
 			}

@@ -315,6 +315,6 @@
                 }));
 
             $config = new Config($mockApplication);
-            $config->configureControllerProvider(array($settings));
+            $config->configureControllerProvider($settings['mount'], $settings['class']);
         }
     }

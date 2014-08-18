@@ -28,7 +28,13 @@ class WebApplicationTest extends WebApplicationTestCase {
                         'param_a' => 'value_a',
                         'param_b' => '%another.service%'
                     )
-                ))
+                )),
+            'controllers' => array(
+                array(
+                    'mount' => '/test',
+                    'class' => 'Skip\Test\Helper\TestControllerServiceProvider'
+                )
+            )
         );
 
         $mockConfigLoader = $this->getMockBuilder('Skip\ConfigLoader')
@@ -47,21 +53,23 @@ class WebApplicationTest extends WebApplicationTestCase {
     }
 
     public function testCreateClient() {
-		$app = $this->createApplication();
-		$app->setConfigLoader($this->getConfigLoader());
-		$app->configure();
+        $app = $this->createApplication();
+        $app->setConfigLoader($this->getConfigLoader());
+        $app->configure();
 
         $client = $this->createClient([], $app);
-
         $crawler = $client->request('GET', '/test');
         $response = $client->getResponse();
-
         $this->assertTrue($response->isOK());
 
+        $crawler = $client->request('GET', '/test/test-controller-service-provider');
+        $response = $client->getResponse();
+        $this->assertTrue($response->isOK());
+        $this->assertEquals('All Good!', $response->getContent());
 
-		$client = $this->createClient();
-		$crawler = $client->request('GET', '/test');
-		$response = $client->getResponse();
-		$this->assertFalse($response->isOK());
+        $client = $this->createClient();
+        $crawler = $client->request('GET', '/test');
+        $response = $client->getResponse();
+        $this->assertFalse($response->isOK());
     }
 }

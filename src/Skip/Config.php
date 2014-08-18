@@ -122,11 +122,7 @@
             $this->console->add($command);
         }
 
-        public function configureControllerProvider(array $settings) {
-            foreach($settings as $config) {
-                // extracts $mount and $class
-                extract($config);
-                $this->app->mount($mount, new $class);
-            }
+        public function configureControllerProvider($mount, $class) {
+            $this->app->mount($mount, new $class);
         }
     }
