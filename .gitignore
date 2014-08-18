@@ -3,3 +3,4 @@ tmp/
 .DS_Store
 test-coverage/
 coverage_report/
+composer.lock
