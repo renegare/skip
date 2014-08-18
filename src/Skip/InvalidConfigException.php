@@ -2,4 +2,4 @@
 
 namespace Skip;
 
-class InvalidConfigException extends \Exception {}
+class InvalidConfigException extends \RuntimeException {}

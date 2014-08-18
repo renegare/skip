@@ -1,27 +1,27 @@
 <?php
 
-	namespace Skip\Test\Helper;
+namespace Skip\Test\Helper;
 
-	use Silex\Application;
-	
-	class TestServiceProvider implements \Silex\ServiceProviderInterface {
+use Silex\Application;
 
-		public function register(Application $app) {
-	        $app['provider'] = $app->share(function () use ($app) {
-	            return $app['provider.setting'] ? $app['provider.setting'] : false;
-	        });
-		}
+class TestServiceProvider implements \Silex\ServiceProviderInterface {
 
-		public function boot(Application $app) {}
+    public function register(Application $app) {
+        $app['provider'] = $app->share(function () use ($app) {
+            return $app['provider.setting'] ? $app['provider.setting'] : false;
+        });
+    }
 
-		public function testAction(Application $app) {
-			return 'route working!';
-		}
+    public function boot(Application $app) {}
 
-		public function misc() {}
+    public function testAction(Application $app) {
+        return 'route working!';
+    }
 
-		public function getTime() {
-			return time();
-		}
+    public function misc() {}
 
-	}
+    public function getTime() {
+        return time();
+    }
+
+}
