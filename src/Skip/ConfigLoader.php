@@ -78,7 +78,7 @@ class ConfigLoader {
                 }
             }
         } catch (\Exception $e) {
-            throw new InvalidConfigException(sprintf('%s in file %s', $e->getMessage(), $file->getRealPath()), $e->getCode(), $e);
+            throw new InvalidConfigException(sprintf('%s in file %s', $e->getMessage(), $file->getRealPath()), $e->getCode());
         }
 
         return $compiledConfig;
