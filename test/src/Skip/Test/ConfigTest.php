@@ -45,7 +45,6 @@
          * @dataProvider getProviderSettingTestCases
          */
         public function testConfigureProvider($providerSetting) {
-
             $mockApplication = $this->getMockBuilder('Skip\WebApplication')
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -68,7 +67,6 @@
 
             $config = new Config($mockApplication);
             $config->configureProvider($providerSetting);
-
         }
 
         /**
@@ -297,5 +295,26 @@
             $config->configureService($serviceName, $serviceSetting);
 
             $service = $mockApplication[$serviceName];
+        }
+
+        public function testMountControllerProvider() {
+            $settings = array(
+                'mount' => '/test',
+                'class' => 'Skip\\Test\\Helper\\TestControllerServiceProvider'
+            );
+
+            $mockApplication = $this->getMockBuilder('Skip\WebApplication')
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $mockApplication->expects($this->once())
+                ->method('mount')
+                ->will($this->returnCallback(function($mountPoint, $provider) use ($settings) {
+                    $this->assertInstanceOf($settings['class'], $provider);
+                    $this->assertEquals($settings['mount'], $mountPoint);
+                }));
+
+            $config = new Config($mockApplication);
+            $config->configureControllerProvider(array($settings));
         }
     }

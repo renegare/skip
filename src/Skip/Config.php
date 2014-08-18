@@ -1,5 +1,5 @@
 <?php
-    
+
     namespace Skip;
 
     use Skip\Util\Reflection;
@@ -32,7 +32,7 @@
         }
 
         public function configureRoute(array $settings, $name='') {
-            
+
             if(isset($settings['debug'])
                 && $settings['debug'] == true
                 && $this->app['debug'] != true ) return;
@@ -120,5 +120,13 @@
                 $command->setContainer($this->app);
             }
             $this->console->add($command);
+        }
+
+        public function configureControllerProvider(array $settings) {
+            foreach($settings as $config) {
+                // extracts $mount and $class
+                extract($config);
+                $this->app->mount($mount, new $class);
+            }
         }
     }
