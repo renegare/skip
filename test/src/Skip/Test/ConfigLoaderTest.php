@@ -12,7 +12,7 @@
 
             $files = array();
             foreach( $mockConfigContent as $type => $config ) {
-                $mockFile = $this->getMockBuilder('Symfony\Component\Finder\Finder\SplFileInfo')
+                $mockFile = $this->getMockBuilder('Symfony\Component\Finder\SplFileInfo')
                     ->disableOriginalConstructor()
                     ->setMethods(array('getContents', 'getExtension'))
                     ->getMock();
